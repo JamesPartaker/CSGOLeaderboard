@@ -1,9 +1,30 @@
 #!/usr/bin/env node
 var debug = require('debug')('CSGOLeaderboard');
 var app = require('../app');
+var config = require('../config');
 
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
+});
+
+var socketio = require('socket.io')(server);
+
+socketio.on('connection', function(socket){
+  socket.emit('message', {params: 'here'});
+});
+
+var Tail = require('tail').Tail;
+
+//Watch CS:GO file for updates
+var tail = new Tail(config.csgolog_filename, "\n", {}, false);
+
+tail.on("line", function(data) {
+  //console.log(data);
+  socketio.emit('message', data);
+});
+
+tail.on("error", function(error) {
+  console.log('ERROR: ', error);
 });
