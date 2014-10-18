@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var config = require('./config');
+
 var app = express();
 
 // view engine setup
@@ -56,5 +58,17 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
 module.exports = app;
+
+//Watch CS:GO file for updates
+var Tail = require('tail').Tail;
+
+var tail = new Tail(config.csgolog_filename, "\n", {}, false);
+
+tail.on("line", function(data) {
+  console.log(data);
+});
+
+tail.on("error", function(error) {
+  console.log('ERROR: ', error);
+});
