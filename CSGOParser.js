@@ -19,7 +19,7 @@ parser.parseLine = function(line){
   }else if(bombPlantRegex.test(line)){
     return parseBombPlant(line);
   }else{
-    return {};
+    return null;
   }
 
 };

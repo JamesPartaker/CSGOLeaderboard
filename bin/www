@@ -13,7 +13,7 @@ var server = app.listen(app.get('port'), function() {
 var socketio = require('socket.io')(server);
 
 socketio.on('connection', function(socket){
-  socket.emit('message', {params: 'here'});
+  //socket.emit('message', {params: 'here'});
 });
 
 var Tail = require('tail').Tail;
@@ -22,10 +22,15 @@ var Tail = require('tail').Tail;
 var tail = new Tail(config.csgolog_filename, "\n", {}, false);
 
 tail.on("line", function(data) {
-  console.log(parser.parseLine(data));
-  //console.log(data);
-  //CSGOParser(data);
-  //socketio.emit('message', data);
+  
+  var parsed = parser.parseLine(data);
+  
+  if(parsed != null){
+    console.log(parsed);
+    //console.log(data);
+    //CSGOParser(data);
+    socketio.emit('message', parsed);
+  }
 });
 
 tail.on("error", function(error) {
