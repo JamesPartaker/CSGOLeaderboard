@@ -74,4 +74,3 @@ function parseBombPlant(line){
 }
 
 module.exports = parser;
-
