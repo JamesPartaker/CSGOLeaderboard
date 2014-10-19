@@ -22,7 +22,7 @@ var Tail = require('tail').Tail;
 var tail = new Tail(config.csgolog_filename, "\n", {}, false);
 
 tail.on("line", function(data) {
-  console.log(parser.parseLine(line));
+  console.log(parser.parseLine(data));
   //console.log(data);
   //CSGOParser(data);
   //socketio.emit('message', data);
