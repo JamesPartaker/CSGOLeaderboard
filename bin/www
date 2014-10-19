@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var debug = require('debug')('CSGOLeaderboard');
 var app = require('../app');
+var parser = require('../CSGOParser');
 var config = require('../config');
 
 app.set('port', process.env.PORT || 3000);
@@ -21,8 +22,10 @@ var Tail = require('tail').Tail;
 var tail = new Tail(config.csgolog_filename, "\n", {}, false);
 
 tail.on("line", function(data) {
+  console.log(parser.parseLine(line));
   //console.log(data);
-  socketio.emit('message', data);
+  //CSGOParser(data);
+  //socketio.emit('message', data);
 });
 
 tail.on("error", function(error) {
